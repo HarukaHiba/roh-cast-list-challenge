@@ -3,21 +3,107 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>cast-list-challenge</title>
+<link rel="stylesheet" href="index.css">
+<script src="Script.js"></script>
+
+<script language="javascript">
+getJSON();
+
+	let obj = JSON.parse(roh_performance_list);
+	
+	let p_title = obj.data.attributes.title;
+	let p_date = obj.included[14].attributes.date;
+		alert(p_date);
+	let p_shortDiscription = obj.data.attributes.shortDescription;
+		alert(p_shortDiscription);
+		
+	// Creatives	
+	let p_creatives_count = Object.keys(obj.included[0].relationships.creatives.data).length;
+		alert("Creatives count of member:"+p_creatives_count);
+
+	let p_creatives = MakeDim(5,p_creatives_count);		// Creative member information
+	let include_id_count = Object.keys(obj.included).length;
+		alert("include_id_count:"+include_id_count);
+
+	for( i=0; i<p_creatives_count; i++){
+		p_creatives[i][0] = obj.included[0].relationships.creatives.data[i].id;	// member_id;
+		surch_id = obj.included[0].relationships.creatives.data[i].id;	// member_id;
+
+		for( k=1; k<include_id_count; k++){
+			w_id = obj.included[k].id;
+			if( surch_id == w_id ){
+				p_creatives[i][1] = obj.included[k].attributes.type;	// type;
+				p_creatives[i][2] = obj.included[k].attributes.role;	// role;
+				p_creatives[i][3] = obj.included[k].attributes.name;	// name;
+					alert("surch_id="+surch_id+", creatives mem name:"+p_creatives[i][3]);
+				break;
+			}
+		}
+	}
+
+
+	// Cast
+		for( k=1; k<include_id_count; k++){
+			w_id = obj.included[k].id;
+			if( w_id == 51382 ){
+				break;
+			}
+		}
+		alert(" id=51382 の　include num="+k);
+	
+	
+	
+	let p_cast_count = Object.keys(obj.included[k].relationships.cast.data).length;
+		alert("p_cast_count:"+p_cast_count);
+
+	let p_cast = MakeDim(5,p_cast_count);				// Cast member information 
+	for( i=0; i<p_cast_count; i++){
+		p_cast[i][0] = obj.included[k].relationships.cast.data[i].id;	// member_id;
+		surch_id = obj.included[k].relationships.cast.data[i].id;	// member_id;
+
+		for( k=1; k<include_id_count; k++){
+			w_id = obj.included[k].id;
+			if( surch_id == w_id ){
+				p_creatives[i][1] = obj.included[k].attributes.type;	// type;
+				p_creatives[i][2] = obj.included[k].attributes.role;	// role;
+				p_creatives[i][3] = obj.included[k].attributes.name;	// name;
+					alert("surch_id="+surch_id+", creatives mem name:"+p_creatives[i][3]);
+				break;
+			}
+		}
+	}
+	/**/	
+	
+</script>
+
+
 </head>
 
 <body>
-<h1>Turandot <!-- title or productions--></h1>
-<p>Date: 10/03/2023</p>
-<p><!--shortDescription--></p>
-
-<h2>Creatives<!--creatives--></h2>
-<ul>
-	<li><!--name--><!--role--></li>
-</ul>
-<h2>Cast</h2>
-<ul>
-	<li><!--castRoles--><!--activities--></li>
-</ul>
+    <header>
+        <div id="header-wrap">
+            <h1>Turandot <!-- title--></h1>
+            <div id="date"><p>Date: 10/03/2023</p></div><!-- date-->
+            <div id="sDesc"></div><!--shortDescription-->
+        </div>
+    </header>  
+    
+   <article>
+        <section id="secCreatives">
+            <h2>Creatives<!--creatives--></h2>
+            <ul id="ulCreatives">
+                <li><span class="role"><!--role-->Music</span><span class="name"><!--name-->Giacomo Puccini</span></li>
+            </ul>
+        </section>
+        
+        <section id="secCast">
+            <p><!--role-->Conducted by <!--name-->Antonio Pappano</p> <!----only ID7831f5a191---->
+            <h2>Cast<!--casts--></h2>
+            <ul id="ulCast">
+                <li><span class="role"><!--role-->Calaf</span><span class="name"><!--name-->Yonghoon Lee</span></li>
+            </ul>
+        </section>
+    </article> 
 
 </body>
 </html>
