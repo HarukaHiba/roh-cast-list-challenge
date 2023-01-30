@@ -20,7 +20,7 @@ function getJSON() {
 		
   };
 
- 
+ //get json test
   request.open("GET", "https://www.bay-london.com/Task_Jan2023/event-details.json", false); // 
  
   
