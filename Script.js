@@ -19,9 +19,8 @@ function getJSON() {
 		}
 		
   };
-  //request.open("GET", "https://www.bay-london.com/Task_Jan2023/sample.json", false); //
-  request.open("GET", "https://www.bay-london.com/Task_Jan2023/event-details.json", false); // 
-  //request.open("GET", "https://shuttai.jp/test/sample.json", false); // 
+ 
+  request.open("GET", "https://www.roh.org.uk/api/event-details?slug=turandot-by-andrei-serban", false); // 
   
   request.send(null);					    // 
 }
@@ -33,7 +32,7 @@ function for_local_debug(){
 
 async function getMembers() {
   const response = await fetch(
-    "https://www.bay-london.com/Task_Jan2023/event-details.json"  // jsonファイルの場所
+    "https://www.roh.org.uk/api/event-details?slug=turandot-by-andrei-serban"  // jsonファイルの場所
   );
   const members = await response.json();
   console.log(members);
