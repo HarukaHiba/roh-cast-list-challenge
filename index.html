@@ -8,22 +8,25 @@
 
 <script language="javascript">
 getJSON();
+	//for_local_debug();
+
+	//roh_performance_list = getJsonLocalFile();
 
 	let obj = JSON.parse(roh_performance_list);
 	
 	let p_title = obj.data.attributes.title;
 	let p_date = obj.included[14].attributes.date;
-		alert(p_date);
-	let p_shortDiscription = obj.data.attributes.shortDescription;
-		alert(p_shortDiscription);
+		//alert(p_title+", "+p_date);
+	let p_shortDescription = obj.data.attributes.shortDescription;
+		//alert(p_shortDiscription);
 		
 	// Creatives	
 	let p_creatives_count = Object.keys(obj.included[0].relationships.creatives.data).length;
-		alert("Creatives count of member:"+p_creatives_count);
+		//alert("Creatives count of member:"+p_creatives_count);
 
 	let p_creatives = MakeDim(5,p_creatives_count);		// Creative member information
 	let include_id_count = Object.keys(obj.included).length;
-		alert("include_id_count:"+include_id_count);
+		//alert("include_id_count:"+include_id_count);
 
 	for( i=0; i<p_creatives_count; i++){
 		p_creatives[i][0] = obj.included[0].relationships.creatives.data[i].id;	// member_id;
@@ -35,7 +38,7 @@ getJSON();
 				p_creatives[i][1] = obj.included[k].attributes.type;	// type;
 				p_creatives[i][2] = obj.included[k].attributes.role;	// role;
 				p_creatives[i][3] = obj.included[k].attributes.name;	// name;
-					alert("surch_id="+surch_id+", creatives mem name:"+p_creatives[i][3]);
+					//alert("surch_id="+surch_id+", creatives mem name:"+p_creatives[i][3]);
 				break;
 			}
 		}
@@ -43,36 +46,99 @@ getJSON();
 
 
 	// Cast
-		for( k=1; k<include_id_count; k++){
-			w_id = obj.included[k].id;
-			if( w_id == 51382 ){
+	for( k=1; k<include_id_count; k++){
+			if( obj.included[k].id == 51382 ){
 				break;
 			}
 		}
-		alert(" id=51382 of　include num="+k);
+		//alert(" id=51382 of　include num="+k);
 	
 	
 	
 	let p_cast_count = Object.keys(obj.included[k].relationships.cast.data).length;
-		alert("p_cast_count:"+p_cast_count);
+		//alert("p_cast_count:"+p_cast_count);
 
 	let p_cast = MakeDim(5,p_cast_count);				// Cast member information 
 	for( i=0; i<p_cast_count; i++){
-		p_cast[i][0] = obj.included[k].relationships.cast.data[i].id;	// member_id;
 		surch_id = obj.included[k].relationships.cast.data[i].id;	// member_id;
+		p_cast[i][0] = surch_id;	
 
-		for( k=1; k<include_id_count; k++){
-			w_id = obj.included[k].id;
+		for( j=1; j<include_id_count; j++){
+			w_id = obj.included[j].id;
 			if( surch_id == w_id ){
-				p_creatives[i][1] = obj.included[k].attributes.type;	// type;
-				p_creatives[i][2] = obj.included[k].attributes.role;	// role;
-				p_creatives[i][3] = obj.included[k].attributes.name;	// name;
-					alert("surch_id="+surch_id+", creatives mem name:"+p_creatives[i][3]);
+				p_cast[i][1] = obj.included[j].attributes.type;	// type;
+				p_cast[i][2] = obj.included[j].attributes.role;	// role;
+				p_cast[i][3] = obj.included[j].attributes.name;	// name;
+					//alert("surch_id="+surch_id+", cast mem name:"+p_cast[i][3]);
 				break;
 			}
 		}
 	}
-	/**/	
+
+	/**/
+	
+	function disp_Json_data(){
+		// Title
+		let	TitleObj = document.getElementById("secTitle");	
+		TitleObj.innerHTML = p_title;
+		// date
+			let	DateObj = document.getElementById("secDate");	
+			let w_date = new Date(p_date.slice(0, 10 ));
+			w_dd = ('0'+w_date.getDate()).slice(-2);
+			w_mm = ('0'+(w_date.getMonth()+1)).slice(-2);
+			w_yyyy = w_date.getFullYear();
+			let	disp_date = '<p>Date: '+w_dd+'/'+w_mm+'/'+w_yyyy+'</p>';
+			
+			DateObj.innerHTML = disp_date;
+
+		// creatives
+			let	CreativesObj = document.getElementById("ulCreatives");
+			let disp_Creatives = '';
+			for( i=0; i<p_creatives_count; i++){
+				w_type = p_creatives[i][1];	// type;
+				w_role = p_creatives[i][2];	// role;
+				w_name = p_creatives[i][3];	// name;
+
+				disp_Creatives = disp_Creatives + '<li><span class="role">'+w_role+'</span><span class="name">'+w_name+'</span></li>';
+
+			}
+
+			CreativesObj.innerHTML = disp_Creatives;
+
+		// Conducter
+		let	ConducterObj = document.getElementById("pConducter");
+			let disp_Conducter = '';
+			for( i=0; i<p_cast_count; i++){
+				if( p_cast[i][2] == 'Conducted by'){
+					w_type = p_cast[i][1];	// type;
+					w_role = p_cast[i][2];	// role;
+					w_name = p_cast[i][3];	// name;
+
+					disp_Conducter = w_role+' '+w_name;
+					break;
+				}
+			}
+
+			ConducterObj.innerHTML = disp_Conducter;
+
+
+
+		// cast
+			let	CastObj = document.getElementById("ulCast");
+			let disp_Cast = '';
+			for( i=0; i<p_cast_count; i++){
+				if( p_cast[i][2] != 'Conducted by'){
+					w_type = p_cast[i][1];	// type;
+					w_role = p_cast[i][2];	// role;
+					w_name = p_cast[i][3];	// name;
+	
+					disp_Cast = disp_Cast + '<li><span class="role">'+w_role+'</span><span class="name">'+w_name+'</span></li>';
+				}
+			}
+
+			CastObj.innerHTML = disp_Cast;
+
+	}
 	
 </script>
 
