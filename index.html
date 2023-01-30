@@ -4,10 +4,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>cast-list-challenge</title>
 <link rel="stylesheet" href="index.css">
-<script src="Script.js"></script>
+<script src="Script_u2.js"></script>
 
 <script language="javascript">
-getJSON();
+
+	getJSON();
 	//for_local_debug();
 
 	//roh_performance_list = getJsonLocalFile();
@@ -30,11 +31,11 @@ getJSON();
 
 	for( i=0; i<p_creatives_count; i++){
 		p_creatives[i][0] = obj.included[0].relationships.creatives.data[i].id;	// member_id;
-		surch_id = obj.included[0].relationships.creatives.data[i].id;	// member_id;
+		search_id = obj.included[0].relationships.creatives.data[i].id;	// member_id;
 
 		for( k=1; k<include_id_count; k++){
 			w_id = obj.included[k].id;
-			if( surch_id == w_id ){
+			if( search_id == w_id ){
 				p_creatives[i][1] = obj.included[k].attributes.type;	// type;
 				p_creatives[i][2] = obj.included[k].attributes.role;	// role;
 				p_creatives[i][3] = obj.included[k].attributes.name;	// name;
@@ -46,7 +47,7 @@ getJSON();
 
 
 	// Cast
-	for( k=1; k<include_id_count; k++){
+		for( k=1; k<include_id_count; k++){
 			if( obj.included[k].id == 51382 ){
 				break;
 			}
@@ -60,12 +61,12 @@ getJSON();
 
 	let p_cast = MakeDim(5,p_cast_count);				// Cast member information 
 	for( i=0; i<p_cast_count; i++){
-		surch_id = obj.included[k].relationships.cast.data[i].id;	// member_id;
-		p_cast[i][0] = surch_id;	
+		search_id = obj.included[k].relationships.cast.data[i].id;	// member_id;
+		p_cast[i][0] = search_id ;	
 
 		for( j=1; j<include_id_count; j++){
 			w_id = obj.included[j].id;
-			if( surch_id == w_id ){
+			if( search_id == w_id ){
 				p_cast[i][1] = obj.included[j].attributes.type;	// type;
 				p_cast[i][2] = obj.included[j].attributes.role;	// role;
 				p_cast[i][3] = obj.included[j].attributes.name;	// name;
@@ -74,7 +75,6 @@ getJSON();
 			}
 		}
 	}
-
 	/**/
 	
 	function disp_Json_data(){
@@ -90,7 +90,10 @@ getJSON();
 			let	disp_date = '<p>Date: '+w_dd+'/'+w_mm+'/'+w_yyyy+'</p>';
 			
 			DateObj.innerHTML = disp_date;
-
+		// sortDescription
+			let	sDescObj = document.getElementById("sDesc");	
+			sDescObj.innerHTML = p_shortDescription;
+		
 		// creatives
 			let	CreativesObj = document.getElementById("ulCreatives");
 			let disp_Creatives = '';
@@ -106,7 +109,7 @@ getJSON();
 			CreativesObj.innerHTML = disp_Creatives;
 
 		// Conducter
-		let	ConducterObj = document.getElementById("pConducter");
+			let	ConducterObj = document.getElementById("pConducter");
 			let disp_Conducter = '';
 			for( i=0; i<p_cast_count; i++){
 				if( p_cast[i][2] == 'Conducted by'){
@@ -148,8 +151,8 @@ getJSON();
 <body>
     <header>
         <div id="header-wrap">
-            <h1>Turandot <!-- title--></h1>
-            <div id="date"><p>Date: 10/03/2023</p></div><!-- date-->
+            <h1 id="secTitle"><!-- title--></h1>
+            <div id="secDate"><p>Date:</p></div><!-- date-->
             <div id="sDesc"></div><!--shortDescription-->
         </div>
     </header>  
@@ -158,18 +161,22 @@ getJSON();
         <section id="secCreatives">
             <h2>Creatives<!--creatives--></h2>
             <ul id="ulCreatives">
-                <li><span class="role"><!--role-->Music</span><span class="name"><!--name-->Giacomo Puccini</span></li>
+            	<!--<li>role</li><li>name</li>-->
             </ul>
         </section>
         
         <section id="secCast">
-            <p><!--role-->Conducted by <!--name-->Antonio Pappano</p> <!----only ID7831f5a191---->
+            <p id="pConducter"><!--role--><!--name--></p> <!----only ID7831f5a191---->
             <h2>Cast<!--casts--></h2>
             <ul id="ulCast">
                 <li><span class="role"><!--role-->Calaf</span><span class="name"><!--name-->Yonghoon Lee</span></li>
             </ul>
         </section>
     </article> 
+
+<script language="javascript">
+	disp_Json_data();
+</script>
 
 </body>
 </html>
